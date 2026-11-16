@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#183b2c" />
+    <meta name="description" content="Find your way around the University of Energy and Natural Resources campus, even when offline." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;700&display=swap" rel="stylesheet" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="stylesheet" href="./styles.css" />
+    <title>UENR Wayfinder</title>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="UENR Wayfinder home">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span class="brand-name">UENR <b>WAYFINDER</b></span>
+        </a>
+        <div class="topbar-right">
+          <span class="campus-name">SUNYANI CAMPUS</span>
+          <span class="network-status" id="networkStatus"><span class="status-dot"></span><span id="networkLabel">Checking map</span></span>
+        </div>
+      </header>
+
+      <section class="workspace" aria-label="Campus navigation">
+        <aside class="panel">
+          <div class="panel-heading">
+            <div class="eyebrow"><span class="eyebrow-line"></span> CAMPUS DIRECTORY</div>
+            <h1>Find your<br /><em>next class.</em></h1>
+            <p class="intro">Walk the Sunyani campus with a map that stays with you.</p>
+          </div>
+
+          <form class="search-form" id="searchForm" role="search">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.2 4.2"></path></svg>
+            <input id="destinationSearch" type="search" placeholder="Search a building" autocomplete="off" aria-label="Search campus buildings" />
+            <kbd>/</kbd>
+          </form>
+
+          <div class="section-label"><span>DESTINATIONS</span><span id="placeCount">11 PLACES</span></div>
+          <div class="place-list" id="placeList" aria-label="Campus buildings"></div>
+
+          <div class="route-card" id="routeCard" aria-live="polite">
+            <div class="route-card-top"><span class="route-tag"><span></span> WALKING ROUTE</span><button class="icon-button clear-route" id="clearRoute" type="button" title="Clear route" aria-label="Clear route">×</button></div>
+            <div class="route-title" id="routeTitle">Choose a building</div>
+            <div class="route-meta" id="routeMeta">Your route will appear here</div>
+            <div class="route-divider"></div>
+            <div class="turn-row"><span class="turn-icon" aria-hidden="true">↑</span><span id="turnInstruction">Select a destination to begin</span></div>
+            <div class="route-caveat" id="routeCaveat">Campus paths are based on community map data. Check signs as you walk.</div>
+          </div>
+
+          <div class="ai-panel" id="aiPanel" aria-live="polite">
+            <div class="ai-header">
+              <span class="ai-badge">AI ASSISTANT</span>
+              <span class="ai-pill">ROUTE GUIDE</span>
+            </div>
+            <p class="ai-summary" id="aiSummary">Choose a destination to generate a route brief.</p>
+            <ul class="direction-list" id="directionList">
+              <li>Select a campus building to begin.</li>
+            </ul>
+          </div>
+
+          <div class="panel-bottom">
+            <button class="locate-button" id="locateButton" type="button">
+              <span class="locate-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.4"></circle><circle cx="12" cy="12" r="2"></circle><path d="M12 2v3m0 14v3M2 12h3m14 0h3"></path></svg></span>
+              <span><b>Use my location</b><small id="locationLabel">Finding your current location…</small></span>
+              <span class="button-arrow" aria-hidden="true">↗</span>
+            </button>
+            <button class="start-point-button" id="startPointButton" type="button">
+              <span class="start-point-icon" aria-hidden="true">⌖</span>
+              <span>Use current GPS</span>
+            </button>
+            <p class="privacy-note"><span aria-hidden="true">●</span> Location stays on this device</p>
+          </div>
+        </aside>
+
+        <section class="map-panel" aria-label="Map and route">
+          <div class="map-topline">
+            <div class="map-title"><span class="map-kicker">UNIVERSITY OF ENERGY AND NATURAL RESOURCES</span><strong>Campus map</strong></div>
+            <div class="map-tools"><span class="map-north"><span aria-hidden="true">↑</span> N</span><button class="map-control photo-control" id="photoButton" type="button" aria-label="View campus building photos" title="View campus building photos"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2"></rect><circle cx="9" cy="9" r="1.5"></circle><path d="m5 17 5-5 3 3 2-2 4 4"></path></svg></button><button class="map-control follow-control" id="followLocationButton" type="button" aria-label="Stop following my location" title="Following your location" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="1.5"></circle><path d="M12 2v3m0 14v3M2 12h3m14 0h3"></path></svg></button><button class="map-control" id="zoomIn" aria-label="Zoom in" title="Zoom in">+</button><button class="map-control" id="zoomOut" aria-label="Zoom out" title="Zoom out">−</button><button class="map-control locate-control" id="recenterButton" aria-label="Fit campus map" title="Fit campus map"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10V4h6M14 4h6v6M20 14v6h-6M10 20H4v-6"></path></svg></button></div>
+          </div>
+          <div class="map-wrap" id="mapWrap">
+            <svg id="campusMap" class="campus-map" viewBox="0 0 820 680" role="img" aria-label="Map of UENR campus walking paths and selected destination">
+              <defs>
+                <pattern id="fieldDots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#d5ded2" opacity=".55"></circle></pattern>
+                <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#1a3326" flood-opacity=".16"></feDropShadow></filter>
+              </defs>
+              <rect x="0" y="0" width="820" height="680" fill="#eef1e8"></rect>
+              <rect x="0" y="0" width="820" height="680" fill="url(#fieldDots)"></rect>
+              <g class="greenery" aria-hidden="true">
+                <path d="M26 124c60-48 103-38 155-11s72 31 130 14 112-66 166-45 38 57 112 57 110-31 171-12v141c-72 38-105 15-158 27s-86 50-150 27-102-35-165-8-92 32-161 1z"></path>
+                <path d="M56 519c76-32 113-23 157 6s93 50 154 30 88-56 151-50 107 49 163 16 87-52 118-42v143H56z"></path>
+                <path d="M664 322c26-20 62-16 94-7v102c-42 14-69 6-94-16s-29-58 0-79z"></path>
+              </g>
+              <g id="roadLayer" class="road-layer"></g>
+              <g id="routeLayer" class="route-layer"></g>
+              <g id="routeSignLayer" class="route-sign-layer"></g>
+              <g id="destinationLayer" class="destination-layer"></g>
+              <g id="userLayer" class="user-layer"></g>
+              <g class="map-labels" aria-hidden="true">
+                <text x="56" y="625">PROF. K.A. BUSIA RD</text>
+                <text x="590" y="525" transform="rotate(-8 590 525)">SSNIT ROAD</text>
+                <text x="712" y="127" transform="rotate(12 712 127)">CAMPUS PATH</text>
+              </g>
+              <g class="scale" aria-hidden="true"><path d="M33 649h68m-68-4v8m68-8v8"></path><text x="111" y="653">100 m</text></g>
+              <rect class="map-hit-area" x="0" y="0" width="820" height="680" fill="transparent" tabindex="0" aria-label="Click or tap the map to set a manual starting point"></rect>
+            </svg>
+            <div class="map-hint" id="mapHint"><span class="hint-crosshair">⌖</span> Tap map to set your start</div>
+            <div class="map-note"><span class="live-pulse"></span><span id="mapNoteText">Locating your current position</span></div>
+            <div class="map-legend"><span><i class="legend-road"></i> WALKWAY</span><span><i class="legend-route"></i> YOUR ROUTE</span><span><i class="legend-place"></i> BUILDING</span></div>
+          </div>
+          <footer class="map-footer"><span>Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap contributors</a></span><span class="footer-note">GPS accuracy varies by device and surroundings</span></footer>
+        </section>
+      </section>
+      <dialog class="photo-dialog" id="photoDialog" aria-labelledby="photoDialogTitle">
+        <div class="photo-dialog-inner">
+          <header class="photo-dialog-header">
+            <div><span class="photo-eyebrow">UENR PHOTO GUIDE</span><h2 id="photoDialogTitle">Campus buildings</h2></div>
+            <button class="icon-button photo-close" id="photoClose" type="button" aria-label="Close photos" title="Close photos">×</button>
+          </header>
+          <figure class="photo-figure">
+            <img class="photo-image" id="campusPhoto" alt="" />
+            <p class="photo-unavailable" id="photoUnavailable" hidden>This photo needs an internet connection to load.</p>
+            <figcaption class="photo-caption">
+              <strong id="photoCaption"></strong>
+              <span><a id="photoSource" target="_blank" rel="noreferrer">Photo by Noahalorwu</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noreferrer">CC BY-SA 4.0</a></span>
+            </figcaption>
+          </figure>
+          <div class="photo-dialog-footer">
+            <span id="photoCount" aria-live="polite"></span>
+            <div class="photo-navigation">
+              <button class="map-control" id="previousPhoto" type="button" aria-label="Previous photo" title="Previous photo">←</button>
+              <button class="map-control" id="nextPhoto" type="button" aria-label="Next photo" title="Next photo">→</button>
+            </div>
+          </div>
+        </div>
+      </dialog>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "UENR Wayfinder",
+  "short_name": "Wayfinder",
+  "description": "Offline campus walking navigation for the University of Energy and Natural Resources.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fbfbf7",
+  "theme_color": "#183b2c"
+}
